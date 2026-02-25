@@ -10,7 +10,7 @@ class BobServer(ctk.CTk):
         self.shared_key = None
 
         # UI Setup (Summary)
-        self.header = ctk.CTkLabel(self, text="🛡️ BOB: SECURE RECEIVER", font=("Consolas", 20, "bold"), text_color="#38bdf8")
+        self.header = ctk.CTkLabel(self, text=" BOB: SECURE RECEIVER", font=("Consolas", 20, "bold"), text_color="#38bdf8")
         self.header.pack(pady=10)
         self.chat_display = ctk.CTkTextbox(self, fg_color="black", text_color="#39ff14", font=("Consolas", 12))
         self.chat_display.pack(fill="both", expand=True, padx=20, pady=10)
@@ -76,4 +76,5 @@ class BobServer(ctk.CTk):
 
 if __name__ == "__main__":
     app = BobServer()
+
     app.mainloop()
