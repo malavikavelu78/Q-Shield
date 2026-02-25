@@ -9,7 +9,7 @@ class AliceClient(ctk.CTk):
         self.geometry("900x700")
         self.shared_key = None
 
-        self.header = ctk.CTkLabel(self, text="🛡️ ALICE: SECURE SENDER", font=("Consolas", 20, "bold"), text_color="#fb7185")
+        self.header = ctk.CTkLabel(self, text="  ALICE: SECURE SENDER", font=("Consolas", 20, "bold"), text_color="#fb7185")
         self.header.pack(pady=10)
         self.chat_display = ctk.CTkTextbox(self, fg_color="black", text_color="#fb7185", font=("Consolas", 12))
         self.chat_display.pack(fill="both", expand=True, padx=20, pady=10)
@@ -67,4 +67,5 @@ class AliceClient(ctk.CTk):
 
 if __name__ == "__main__":
     app = AliceClient()
+
     app.mainloop()
