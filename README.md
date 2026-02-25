@@ -1,54 +1,69 @@
-# Q-Shield: Hybrid Post-Quantum Cryptographic Suite
+# Q-SHIELD: Secure Chat Application
 
-**Q-Shield** is a next-generation security application designed to mitigate the risks posed by **Cryptographically Relevant Quantum Computers (CRQC)**. By implementing **NIST-standardized Post-Quantum Cryptography (PQC)** algorithms within a hybrid framework, Q-Shield ensures data remains secure against both classical and quantum-era attacks.
+This project is a secure messaging prototype demonstrating an encrypted communication channel between two parties, referred to as Alice (Client) and Bob (Server). Built using Python and CustomTkinter, it focuses on simulating a secure handshake and encrypted data transmission over TCP sockets.
 
----
+## Project Overview
 
-## Executive Summary
-Traditional encryption methods like RSA and ECC are vulnerable to **Shor's Algorithm**, which can crack them in polynomial time using a quantum computer. **Q-Shield** transitions security to **Lattice-based Cryptography**, specifically following the **FIPS 203 (ML-KEM)** and **FIPS 204 (ML-DSA)** standards to provide a future-proof encryption ecosystem.
+The main goal of Q-SHIELD is to visualize how secure data transmission works behind the scenes. While the graphical interface shows the readable messages, the terminal logs reveal the actual encrypted "cipher" text being sent over the network. This demonstrates that even if a third party intercepts the data, they cannot read the content without the shared key.
 
----
+## Features
 
-## Technical Architecture & Approach
+- **Socket Networking:** Uses Python's built-in socket library to establish a TCP connection between localhost ports.
+- **Custom Encryption Handshake:** Implements a dynamic key exchange mechanism using hashing (SHA-512) and random salt generation.
+- **XOR Encryption:** Messages are encrypted using a custom XOR cipher based on the generated shared key.
+- **GUI Interface:** A dark-mode, modern user interface built with CustomTkinter for a better user experience.
+- **Traffic Monitoring:** The backend terminal prints the raw encrypted packets, allowing developers to verify that data is obfuscated during transit.
+- **Attack Simulation:** Includes a demonstration feature on the server side to simulate the blocking of a brute-force or quantum attack.
 
-### 1. Key Encapsulation Mechanism (ML-KEM / Kyber)
-The core of Q-Shield's key exchange relies on **Module-Lattice-based Key-Encapsulation**.
-* **Mathematical Hardness:** Based on the **Learning With Errors (LWE)** problem over module lattices.
-* **Functionality:** Securely generates and exchanges a 256-bit shared secret key between two entities without direct transmission of the key itself.
+## Technical Details
 
+The application consists of two main scripts:
 
+1. **Bob (Server):** 
+   - Listens for incoming connections.
+   - Generates a public key and waits for the handshake.
+   - acts as the receiver and can reply to messages.
 
-### 2. Digital Signature Algorithm (ML-DSA / Dilithium)
-To ensure **Authenticity** and **Non-repudiation**, the system utilizes the Dilithium algorithm.
-* **Mechanism:** Employs the **Fiat-Shamir with Aborts** technique to generate compact and secure digital signatures.
-* **Integrity:** Every encrypted message is signed; any tampering with the ciphertext will result in a signature verification failure.
+2. **Alice (Client):** 
+   - Connects to the server.
+   - Initiates the handshake by sending a salt.
+   - Generates the shared secret key locally.
 
-### 3. The Hybrid Encryption Model
-Q-Shield follows a practical **Hybrid Logic**:
-* **Layer 1 (PQC):** Uses Kyber to protect the session key from quantum decryption.
-* **Layer 2 (Symmetric):** Uses the PQC-protected key to encrypt bulk data via a high-speed symmetric cipher (simulated with SHA-3/AES logic).
-* **Layer 3 (Hashing):** Uses **SHA-3 (Keccak)** for high-security message digesting and randomness generation.
+### How the Security Works
 
+1. **Handshake:** When Alice connects to Bob, Bob sends a public key. Alice generates a random "salt" and sends it back. Both parties combine these values and hash them to create a symmetrical `shared_key`.
+2. **Encryption:** When a message is sent, the text is combined with a signature. Each byte of this payload is XOR-ed against the shared key.
+3. **Encoding:** The encrypted bytes are Base64 encoded before being sent over the network to ensure safe transport.
+4. **Decryption:** The receiver reverses the process using the same shared key to reveal the original message.
 
+## Prerequisites
 
----
+To run this project, you need Python installed on your machine. You also need to install the `customtkinter` library.
 
-## System Workflow
-1. **Entropy Collection:** Uses CSPRNG to generate high-quality random seeds.
-2. **Key Exchange:** Initiates ML-KEM to establish a quantum-safe shared secret.
-3. **Encryption & Signing:** The plaintext message is encrypted using the shared secret and signed with a Dilithium private key.
-4. **Verification & Decryption:** The receiver validates the signature before decapsulating the key to retrieve the original plaintext.
+You can install the dependency using pip:
 
----
+pip install customtkinter
 
-## Performance Benchmarking
-Q-Shield includes a built-in analysis module to evaluate:
-* **Execution Latency:** Measured in milliseconds (ms) to show the efficiency of lattice-based math.
-* **Key Size Trade-offs:** Comparison graphs between Classical RSA (2048/3072 bit) and NIST PQC levels (512/768/1024).
+## How to Run
 
----
+Since this is a client-server application, you must run the scripts in a specific order.
 
-## Tech Stack
-* **Language:** Python 3.13+
-* **UI Framework:** Tkinter (Desktop GUI)
-* **Core Libraries:** `hashlib` (SHA-3), `secrets` (Cryptographic randomness), `time` (Performance tracking)
+1. **Start the Server (Bob)**
+   Open your terminal and run the Bob script first. This sets up the listener.
+   
+   python bob_server.py
+
+2. **Start the Client (Alice)**
+   Open a new terminal window and run the Alice script.
+   
+   python alice_client.py
+
+Once both windows are open, you can type messages in the input field and click "Send". Check your terminal windows to see the encrypted data logs appearing in real-time.
+
+## Disclaimer
+
+This project is created for educational purposes to demonstrate the concepts of socket programming, hashing, and basic encryption algorithms. While it implements security concepts, it is a prototype and not intended for use as a production-grade cryptographic tool.
+
+## License
+
+This project is open-source and available for educational use.
